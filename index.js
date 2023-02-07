@@ -10,14 +10,14 @@ const weaviate = require('weaviate-client');
 const fs = require("fs");
 
 let url = process.env.DB
-let WEAVIATE_URL = process.env.WEAVIATE_URL
+let WEAVIATE_HOST = process.env.WEAVIATE_PRODUCT_HOST
 let OPEN_API_KEY = process.env.OPENAI_API_KEY
 
 const client = new MongoClient(url)
 
 const w_client = weaviate.client({
   scheme: 'https',
-  host: WEAVIATE_URL,
+  host: WEAVIATE_HOST,
   headers: {"X-OpenAI-Api-Key": OPEN_API_KEY},
 });
 
@@ -63,7 +63,7 @@ async function main() {
           total_reviews: doc.total_reviews,
           overview: doc.overview,
           specifications: doc.specifications,
-          p_id: doc.find
+          p_id: doc.id
         }
       }
 
@@ -92,12 +92,13 @@ async function main() {
     batcher
     .do()
     .then(res => {
+      console.log("----finally ----")
       console.log(res)
     })
     .catch(err => {
       console.error(err)
     });
-
+    console.log('---- returning done-----')
     return 'done'
   }
  
