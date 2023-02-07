@@ -21,28 +21,10 @@ const w_client = weaviate.client({
   headers: {"X-OpenAI-Api-Key": OPEN_API_KEY},
 });
 
-
-var toImport = [{
-  class: 'Author',
-  id: '36ddd591-2dee-4e7e-a3cc-eb86d30a4303',
-  properties: {
-    name: 'Jane Doe',
-    writesFor: [{
-      beacon: 'weaviate://localhost/f81bfe5e-16ba-4615-a516-46c2ae2e5a80'
-    }]
-  }
-},
-{
-  class: 'Author',
-  id: '36ddd591-2dee-4e7e-a3cc-eb86d30a4304',
-  properties: {
-    name: 'John Doe',
-    writesFor: [{
-      beacon: 'weaviate://localhost/f81bfe5e-16ba-4615-a516-46c2ae2e5a80'
-    }]
-  }
-}];
-
+let classObj = {
+  class: "Product",
+  vectorizer: "text2vec-openai"
+}
 
 async function main() {
   
@@ -51,14 +33,74 @@ async function main() {
   const db = client.db();
   const product = db.collection('product');
   const cursor = product.find({});
+  let x=0
+  let batcher = w_client.batch.objectsBatcher()
+  let counter = 0
+  let batchsize = 50
   await cursor.forEach(doc => {
-      csv.stringify([doc], {header: false}, (err, output) => {
-        fs.appendFileSync("product.csv", output);
+      x++
+      if (x < 5) console.log(doc._id)
+
+      // construct an object with class and properties
+      const obj = {
+        class: 'Product',
+        properties: {
+          id: doc._id,
+          url: doc.url,
+          crawled_at: doc.crawled_at,
+          source: doc.source,
+          name: doc.name,
+          images: doc.images,
+          description: doc.description,
+          brand: doc.brand,
+          sku_id: doc.sku_id,
+          price: doc.price,
+          in_stock: doc.in_stock,
+          currency: doc.currency,
+          color: doc.color,
+          breadcrumbs: doc.breadcrumbs,
+          avg_rating: doc.avg_rating,
+          total_reviews: doc.total_reviews,
+          overview: doc.overview,
+          specifications: doc.specifications,
+          p_id: doc.find
+        }
+      }
+
+      //add the object to the batch queue
+      batcher = batcher.withObject(obj)
+
+      // when the batch counter reaches batchsize, push to Weaviate
+      if (counter++ == batchsize) {
+        // flush the batch queue
+        batcher
+        .do()
+        .then(res => {
+          console.log(res)
+        })
+        .catch(err => {
+          console.log(err)
+        })
+        // restart the batch queue
+        counter = 0
+        batcher = w_client.batch.objectsBatcher()
+      }
+
         
-      });
+    });
+    // flush the remaining objects
+    batcher
+    .do()
+    .then(res => {
+      console.log(res)
     })
-  return 'done'
-}
+    .catch(err => {
+      console.error(err)
+    });
+
+    return 'done'
+  }
+ 
 
 main()
   .then(console.log)
