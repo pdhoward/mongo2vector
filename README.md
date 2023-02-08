@@ -7,7 +7,9 @@
 * node index.js
 * To confirm data import
 
-https://some-endpoint.semi.network/v1/objects
+https://product.weaviate.network/v1/objects
+
+https://modernization.weaviate.network/v1/object
 
 or 
 
