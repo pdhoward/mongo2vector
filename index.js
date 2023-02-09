@@ -5,6 +5,7 @@
 //////////////////////////////////////////////////
 require('dotenv').config()
 const {MongoClient} = require("mongodb")
+const {ObjectId} = require('mongodb')
 const weaviate = require('weaviate-client');
 
 const fs = require("fs");
@@ -42,7 +43,7 @@ let classObj = {
     "properties": [
       { "dataType": ["string"],
         "description": "Id of the product object from Mongo DB",
-        "name": "object_id"
+        "name": "objectId"
       },
       { "dataType": ["string"],
         "description": "url for the product",
@@ -50,7 +51,7 @@ let classObj = {
       },
       { "dataType": ["string"],
         "description": "date the information was retrieved from website",
-        "name": "crawled_at"
+        "name": "crawledAt"
       },
       { "dataType": ["string"],
         "description": "website where product is hosted",
@@ -74,7 +75,7 @@ let classObj = {
       },
       { "dataType": ["string"],
         "description": "SKU id for the product",
-        "name": "sku_id"
+        "name": "skuId"
       },
       { "dataType": ["text"],
         "description": "Retail price for the product",
@@ -98,7 +99,7 @@ let classObj = {
       },
       { "dataType": ["text"],
         "description": "Average of the total product reviews",
-        "name": "average_rating"
+        "name": "averageRating"
       },
       { "dataType": ["text"],
         "description": "A detailed review of the product and associated considerations",
@@ -110,7 +111,7 @@ let classObj = {
       },
       { "dataType": ["text"],
         "description": "Unique id of the product",
-        "name": "product_id"
+        "name": "productId"
       },
     ]
    
@@ -124,10 +125,10 @@ let testClassObj = {
   "description": "A product catalog",
   "vectorize": "text2vec-openai",
   "properties": [
-    { "dataType": ["string"],
-      "description": "Id of the product object from Mongo DB",
-      "name": "object_id"
-    },   
+    { "dataType": ["text"],
+      "description": "Product long name",
+      "name": "name"
+    }
   ]
  
 }
@@ -206,10 +207,12 @@ async function main() {
       
       let scrubOverview = cleanString(doc.overview)
       let scrubImages = convertArray(doc.images)
+      let newId = new ObjectId(doc._id)
+      let newIdString = newId.toString()
+      let name = doc.name
 
       if (x < 5) {
-        console.log(scrubOverview)
-        console.log(scrubImages)
+        console.log(`The datatype for ${name} is ${typeof name}`)
       }
 
       // construct an object with class and properties
@@ -242,7 +245,7 @@ async function main() {
       const obj = {
         class: testClassObj,
         properties: {
-          object_id: doc._id,
+          name: name
           
         }
       }

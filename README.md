@@ -9,7 +9,11 @@
 
 https://product.weaviate.network/v1/objects
 
+https://product.weaviate.network/v1/schema
+
 https://modernization.weaviate.network/v1/object
+
+https://github.com/weaviate/weaviate-examples/blob/main/README.md
 
 or 
 
