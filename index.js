@@ -117,20 +117,23 @@ let classObj = {
    
 }
 
-let testClassName = "Testproduct"
+let testClassName = "Products"
 
 
 let testClassObj = {  
-  "class": "Testproduct",
-  "description": "A product catalog",
-  "vectorize": "text2vec-openai",
-  "properties": [
-    { "dataType": ["text"],
-      "description": "Product long name",
-      "name": "name"
+  "classes": [
+    {
+      "class": "Products",
+      "description": "A product catalog",
+      "vectorize": "text2vec-openai",
+      "properties": [
+        { "dataType": ["text"],
+          "description": "Product long name",
+          "name": "name"
+        }
+      ]
     }
-  ]
- 
+  ]  
 }
 
 ///////////////////////////////////////

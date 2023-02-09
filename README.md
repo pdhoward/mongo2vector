@@ -15,6 +15,20 @@ https://modernization.weaviate.network/v1/object
 
 https://github.com/weaviate/weaviate-examples/blob/main/README.md
 
+ACTION
+https://github.com/Iheanacho-ai/weaviate-demo/blob/main/index.js
+
+https://github.com/weaviate/weaviate-javascript-client
+
+https://github.com/halvespereira/weaviate-example-app
+
+https://github.com/roguejedi1/weaviate-nextjs
+
+https://github.com/faheemsajjad65/Search-through-Weaviate-in-React
+
+
+
+
 or 
 
 '''
