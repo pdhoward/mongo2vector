@@ -120,8 +120,7 @@ let classObj = {
 let testClassName = "Products"
 
 
-let testClassObj = {  
-  "classes": [
+let testClassObj = 
     {
       "class": "Products",
       "description": "A product catalog",
@@ -133,8 +132,7 @@ let testClassObj = {
         }
       ]
     }
-  ]  
-}
+
 
 ///////////////////////////////////////
 ///// delete existing classes ////////
